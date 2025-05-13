@@ -1,0 +1,6 @@
+@restaurante_comidas_tipicas_del_sur_HostAddress = http://localhost:5288
+
+GET {{restaurante_comidas_tipicas_del_sur_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

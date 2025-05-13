@@ -1,0 +1,76 @@
+## Archivos generados por Visual Studio y .NET
+bin/
+obj/
+out/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos de configuración local
+.vs/
+launchSettings.json
+
+# Archivos de construcción
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Logs
+*.log
+
+# Configuración de Rider
+.idea/
+*.sln.iml
+
+# Archivos de paquetes
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+# Si usas paquetes locales, quítalo
+
+# Archivos de usuario
+*.dbmdl
+*.bak
+*.backup
+*.tmp
+*.temp
+
+# Archivos de publicación
+publish/
+*.Publish.xml
+
+# Archivos de test
+TestResults/
+*.coverage
+*.coveragexml
+*.vsp
+*.vspx
+*.sap
+
+# Archivos de herramientas
+*.psess
+*.vsp
+*.pdb
+
+# Secretos (asegúrate de no subir archivos sensibles)
+secrets.json
+
+# Archivos para funciones de Azure
+.local.settings.json
+
+# Archivos de dependencias externas
+node_modules/
+bower_components/
+
+# Archivos de docker
+Dockerfile.*
+docker-compose.*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Git
+*.orig
