@@ -5,9 +5,9 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
 {
     public class SupervisorRepository : ISupervisorRepository
     {
-        private readonly RestauranteComidaTipicaDelSurContext _context;
+        private readonly RestauranteComidasDelSurContext _context;
 
-        public SupervisorRepository(RestauranteComidaTipicaDelSurContext context)
+        public SupervisorRepository(RestauranteComidasDelSurContext context)
         {
             _context = context;
         }

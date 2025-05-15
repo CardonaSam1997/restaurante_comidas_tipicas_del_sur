@@ -5,7 +5,7 @@ namespace restaurante_comidas_tipicas_del_sur.Entity;
 
 public partial class DetallexFactura
 {
-    public int IdDetallesxFactura { get; set; }
+    public int IdDetallexFactura { get; set; }
 
     public int? NroFactura { get; set; }
 

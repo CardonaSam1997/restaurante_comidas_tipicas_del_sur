@@ -8,9 +8,9 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
     public class MeseroRepository: IMeseroRepository
     {
 
-        private readonly RestauranteComidaTipicaDelSurContext _context;
+        private readonly RestauranteComidasDelSurContext _context;
 
-        public MeseroRepository(RestauranteComidaTipicaDelSurContext context)
+        public MeseroRepository(RestauranteComidasDelSurContext context)
         {
             _context = context;
         }

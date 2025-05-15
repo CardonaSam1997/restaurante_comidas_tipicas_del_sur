@@ -6,9 +6,9 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
 {
     public class DetalleFacturaRepository: IDetalleFacturaRepository
     {
-        private readonly RestauranteComidaTipicaDelSurContext _context;
+        private readonly RestauranteComidasDelSurContext _context;
 
-        public DetalleFacturaRepository(RestauranteComidaTipicaDelSurContext context)
+        public DetalleFacturaRepository(RestauranteComidasDelSurContext context)
         {
             _context = context;
         }
@@ -25,33 +25,39 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
         }
 
         public async Task<PlatoMasVendidoDto> obtenerPlatoMasVendidoAsync(int anio, int mes)
-        {  // Consulta a la base de datos
+        {
             var resultado = await _context.DetallexFacturas
-                .Where(d => d.NroFacturaNavigation.Fecha.HasValue &&
+                .Include(d => d.NroFacturaNavigation)
+                .Where(d => d.NroFacturaNavigation != null &&
+                            d.NroFacturaNavigation.Fecha.HasValue &&
                             d.NroFacturaNavigation.Fecha.Value.Year == anio &&
                             d.NroFacturaNavigation.Fecha.Value.Month == mes)
                 .GroupBy(d => d.Plato)
                 .Select(g => new
                 {
                     Plato = g.Key,
-                    TotalVendido = g.Count(),
-                    TotalFacturado = g.Sum(d => d.Valor)  // Usamos Valor, ya que es el campo que tiene el monto de la venta
+                    CantidadVendida = g.Count(),
+                    TotalFacturado = g.Sum(d => d.Valor)
                 })
-                .OrderByDescending(g => g.TotalVendido)
+                .OrderByDescending(g => g.CantidadVendida)
                 .FirstOrDefaultAsync();
 
-            // Verificamos si hay resultados y devolvemos el DTO
-            if (resultado != null)
+            if (resultado == null)
             {
-                return new PlatoMasVendidoDto
-                {
-                    Plato = resultado.Plato,
-                    CantidadVendida = resultado.TotalVendido,
-                    TotalFacturado = resultado.TotalFacturado
-                };
+                return new PlatoMasVendidoDto { Plato = "N/A", CantidadVendida = 0, TotalFacturado = 0 };
             }
 
-            return null;
+            var resul = await _context.DetallexFacturas
+                .Where(x => x.Plato == resultado.Plato)
+                .ToListAsync();
+
+            return new PlatoMasVendidoDto
+            {
+                Plato = resultado.Plato ?? "N/A",
+                CantidadVendida = resul.Count,
+                TotalFacturado = resul.Sum(x=> x.Valor) ?? 0
+            };
         }
+
     }
 }

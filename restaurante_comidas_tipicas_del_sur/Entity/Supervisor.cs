@@ -13,7 +13,7 @@ public partial class Supervisor
 
     public int? Edad { get; set; }
 
-    public int? Antiguedad { get; set; }
+    public int? Antigüedad { get; set; }
 
     public virtual ICollection<DetallexFactura> DetallexFacturas { get; set; } = new List<DetallexFactura>();
 }

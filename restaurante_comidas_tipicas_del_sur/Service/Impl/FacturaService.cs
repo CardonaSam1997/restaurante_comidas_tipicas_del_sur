@@ -10,16 +10,17 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
         private readonly IFacturaRepository _facturaRepo;        
         private readonly IClienteRepository _clienteRepo;
         private readonly IMesaRepository _mesaRepo;
-        private readonly RestauranteComidaTipicaDelSurContext _context;
+        private readonly IDetalleFacturaRepository _detalleFacturaRepository;
+
 
         public FacturaService(IFacturaRepository facturaRepo,IMeseroRepository meseroRepo, IClienteRepository clienteRepo,
-                              IMesaRepository mesaRepo, RestauranteComidaTipicaDelSurContext context)
+                              IMesaRepository mesaRepo, IDetalleFacturaRepository detalleFacturaRepository)
         {
             _facturaRepo = facturaRepo;            
             _meseroRepo = meseroRepo;
             _clienteRepo = clienteRepo;
             _mesaRepo = mesaRepo;
-            _context = context;
+            _detalleFacturaRepository = detalleFacturaRepository;
         }
 
         public async Task<int> CrearFacturaAsync(CrearFacturaRequest dto)
@@ -30,7 +31,7 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
             {
                 cliente = new Cliente
                 {
-                   // Identificacion = dto.Cliente.Identificacion,
+                    Identificacion = dto.Cliente.Identificacion,
                     Nombres = dto.Cliente.Nombres,
                     Apellidos = dto.Cliente.Apellidos,
                     Direccion = dto.Cliente.Direccion,
@@ -46,7 +47,6 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
             {
                 mesero = new Mesero
                 {
-                    IdMesero = dto.Mesero.IdMesero,
                     Nombres = dto.Mesero.Nombres
                 };
                 await _meseroRepo.agregarMesero(mesero);
@@ -57,33 +57,43 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
             {
                 mesa = new Mesa
                 {
-                    NroMesa = dto.Mesa.NroMesa,
                     Nombre = dto.Mesa.Nombre
                 };
                 await _mesaRepo.agregarMesa(mesa);
             }
 
             //esto no es necesario??
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
 
 
+            // Crear la factura sin los detalles
             var factura = new Factura
             {
                 IdCliente = cliente.Identificacion,
                 IdMesero = mesero.IdMesero,
                 NroMesa = mesa.NroMesa,
-                Fecha = DateTime.UtcNow,
-                DetallexFacturas = dto.Platos.Select(p => new DetallexFactura
-                {
-                    IdSupervisor = p.IdSupervisor,
-                    Plato = p.Plato,
-                    Valor = p.Valor
-                }).ToList()
+                Fecha = DateOnly.FromDateTime(DateTime.UtcNow)
             };
 
+            // Guardar la factura primero en la base de datos
             await _facturaRepo.crearFactura(factura);
+
+            // Ahora, agregamos cada DetallexFactura por separado
+            foreach (var plato in dto.Platos)
+            {
+                var detalle = new DetallexFactura
+                {
+                    IdSupervisor = 1,
+                    Plato = plato.Plato,
+                    Valor = plato.Valor,
+                    NroFactura = factura.NroFactura
+                };
+
+                await _detalleFacturaRepository.agregarDetalleFactura(detalle);
+            }
+
            
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
 
             return factura.NroFactura;
         }

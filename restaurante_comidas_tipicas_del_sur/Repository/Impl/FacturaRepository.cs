@@ -5,9 +5,9 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
 {
     public class FacturaRepository : IFacturaRepository
     {
-        private readonly RestauranteComidaTipicaDelSurContext _context;
+        private readonly RestauranteComidasDelSurContext _context;
         
-        public FacturaRepository(RestauranteComidaTipicaDelSurContext context)
+        public FacturaRepository(RestauranteComidasDelSurContext context)
         {
             _context = context;
         }

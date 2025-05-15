@@ -6,9 +6,9 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
 {
     public class ClienteRepository : IClienteRepository
     {
-        private readonly RestauranteComidaTipicaDelSurContext _context;
+        private readonly RestauranteComidasDelSurContext _context;
 
-        public ClienteRepository(RestauranteComidaTipicaDelSurContext context)
+        public ClienteRepository(RestauranteComidasDelSurContext context)
         {
             _context = context;
         }
