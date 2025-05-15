@@ -16,10 +16,14 @@ namespace restaurante_comidas_tipicas_del_sur.Controllers
         }
 
         [HttpPost("crear")]
-        public async Task<IActionResult> CrearFactura([FromBody] FacturaRequest request)
-        {
-            await _facturaService.CrearFacturaAsync(request);
+        public async Task<IActionResult> CrearFactura(CrearFacturaRequest request)
+        {            
+            await _facturaService.CrearFacturaAsync(request);            
             return Ok("Factura creada exitosamente");
         }
+        /**
+         * VERIFICAR LA TABLA CLIENTE EN LA BD EL CAMPO IDENTIFICACION NO PUEDE SER AUTOINCRMENT
+         * CREO QUE LO MISMO ME PASA CON FACTURA
+         */
     }
 }

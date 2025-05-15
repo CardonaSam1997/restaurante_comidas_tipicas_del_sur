@@ -25,5 +25,17 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
         }
+
+
+        public async Task<List<Cliente>> obtenerClientesPorConsumo(decimal valorMinimo)
+        {
+            var clientes = await _context.Clientes
+                .Where(c => c.Facturas
+                    .SelectMany(f => f.DetallexFacturas)
+                    .Sum(d => d.Valor) >= valorMinimo)
+                .ToListAsync();
+
+            return clientes;
+        }
     }
 }

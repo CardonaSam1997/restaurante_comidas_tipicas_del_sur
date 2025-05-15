@@ -22,7 +22,7 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
             _context = context;
         }
 
-        public async Task<int> CrearFacturaAsync(CrearFacturaDto dto)
+        public async Task<int> CrearFacturaAsync(CrearFacturaRequest dto)
         {            
             var cliente = await _clienteRepo.obtenerClientePorId(dto.Cliente.Identificacion);
 
@@ -30,7 +30,7 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
             {
                 cliente = new Cliente
                 {
-                    Identificacion = dto.Cliente.Identificacion,
+                   // Identificacion = dto.Cliente.Identificacion,
                     Nombres = dto.Cliente.Nombres,
                     Apellidos = dto.Cliente.Apellidos,
                     Direccion = dto.Cliente.Direccion,
@@ -62,7 +62,8 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
                 };
                 await _mesaRepo.agregarMesa(mesa);
             }
-            
+
+            //esto no es necesario??
             await _context.SaveChangesAsync();
 
 
@@ -81,6 +82,7 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
             };
 
             await _facturaRepo.crearFactura(factura);
+           
             await _context.SaveChangesAsync();
 
             return factura.NroFactura;

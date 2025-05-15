@@ -4,6 +4,6 @@
     {
         public string? Plato { get; set; }
         public int? CantidadVendida { get; set; }
-        public decimal TotalFacturado { get; set; }
+        public decimal? TotalFacturado { get; set; }
     }
 }

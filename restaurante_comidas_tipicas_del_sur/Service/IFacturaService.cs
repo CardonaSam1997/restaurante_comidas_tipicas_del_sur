@@ -4,7 +4,7 @@ namespace restaurante_comidas_tipicas_del_sur.Service
 {
     public interface IFacturaService
     {
-        Task<int> CrearFacturaAsync(CrearFacturaDto dto);
+        Task<int> CrearFacturaAsync(CrearFacturaRequest request);
 
     }
 }

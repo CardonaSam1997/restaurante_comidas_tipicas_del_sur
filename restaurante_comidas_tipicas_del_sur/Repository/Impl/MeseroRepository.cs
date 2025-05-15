@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using restaurante_comidas_tipicas_del_sur.Dto;
 using restaurante_comidas_tipicas_del_sur.Entity;
+using System;
 
 namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
 {
@@ -11,6 +13,22 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
         public MeseroRepository(RestauranteComidaTipicaDelSurContext context)
         {
             _context = context;
+        }
+
+        public async Task<List<MeseroVentasDto>> ObtenerVentasPorMesero()
+        {
+            var resultado = await _context.Meseros
+                .Select(m => new MeseroVentasDto
+                {
+                    Nombre = m.Nombres,
+                    Apellido = m.Apellidos,
+                    TotalVendido = m.Facturas
+                        .SelectMany(f => f.DetallexFacturas)
+                        .Sum(d => (decimal?)d.Valor) ?? 0
+                })
+                .ToListAsync();
+
+            return resultado;
         }
 
         async public Task<Mesero?> obtenerMeseroPorId(int id) =>

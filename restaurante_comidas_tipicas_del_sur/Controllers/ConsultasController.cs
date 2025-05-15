@@ -15,23 +15,23 @@ namespace restaurante_comidas_tipicas_del_sur.Controllers
         }
 
         [HttpGet("ventas-meseros")]
-        public async Task<IActionResult> VentasPorMesero([FromQuery] DateTime desde, [FromQuery] DateTime hasta)
+        public async Task<IActionResult> VentasPorMesero()
         {
-            var resultado = await _consultasService.ObtenerVentasPorMeseroAsync(desde, hasta);
+            var resultado = await _consultasService.ObtenerVentasPorMesero();
             return Ok(resultado);
         }
 
         [HttpGet("clientes-por-consumo")]
-        public async Task<IActionResult> ClientesPorConsumo([FromQuery] decimal minimo)
+        public async Task<IActionResult> ClientesPorConsumo([FromQuery] decimal valor)
         {
-            var resultado = await _consultasService.ObtenerClientesPorConsumo(minimo);
+            var resultado = await _consultasService.ObtenerClientesPorConsumo(valor);
             return Ok(resultado);
         }
 
         [HttpGet("plato-mas-vendido")]
-        public async Task<IActionResult> PlatoMasVendido([FromQuery] DateTime mes)
+        public async Task<IActionResult> PlatoMasVendido(int anio,int mes)
         {
-            var resultado = await _consultasService.ObtenerPlatoMasVendido(mes);
+            var resultado = await _consultasService.ObtenerPlatoMasVendido(anio,mes);
             return Ok(resultado);
         }
     }

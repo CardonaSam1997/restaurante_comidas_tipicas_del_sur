@@ -11,13 +11,12 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
         {
             _context = context;
         }
-        async public Task crearFactura(Factura factura)
+        public async Task crearFactura(Factura factura)
         {
             _context.Facturas.Add(factura);
             await _context.SaveChangesAsync();
         }
-        async public Task<IEnumerable<Factura>> obtenerFacturaPorFechas(DateTime desde, DateTime hasta) =>
-            await _context.Facturas.Where(f => f.Fecha >= desde && f.Fecha <= hasta).ToListAsync();
+       
         
     }
     

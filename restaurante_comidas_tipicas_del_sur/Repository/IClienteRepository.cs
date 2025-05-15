@@ -6,6 +6,8 @@ namespace restaurante_comidas_tipicas_del_sur.Repository
     {
         Task<Cliente?> obtenerClientePorId(int id);
         Task<IEnumerable<Cliente>> obtenerClientesAsync();
-        Task agregarCliente(Cliente cliente);        
+        Task agregarCliente(Cliente cliente);
+
+        Task<List<Cliente>> obtenerClientesPorConsumo(decimal valorMinimo);
     }
 }
