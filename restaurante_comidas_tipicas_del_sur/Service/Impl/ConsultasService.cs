@@ -20,9 +20,9 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
             _clienteRepo = clienteRepo;
         }
 
-        public async Task<List<MeseroVentasDto>> ObtenerVentasPorMesero()
+        public async Task<List<MeseroVentasDto>> ObtenerVentasPorMesero(DateOnly fecha)
         {
-            return await _meseroRepo.ObtenerVentasPorMesero();
+            return await _meseroRepo.ObtenerVentasPorMesero(fecha);
         }
         
         public async Task<List<Cliente>> ObtenerClientesPorConsumo(decimal valorMinimo)

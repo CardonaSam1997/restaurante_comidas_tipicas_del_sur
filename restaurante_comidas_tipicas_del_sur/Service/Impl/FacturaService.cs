@@ -62,11 +62,6 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
                 await _mesaRepo.agregarMesa(mesa);
             }
 
-            //esto no es necesario??
-            //await _context.SaveChangesAsync();
-
-
-            // Crear la factura sin los detalles
             var factura = new Factura
             {
                 IdCliente = cliente.Identificacion,
@@ -75,10 +70,8 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
                 Fecha = DateOnly.FromDateTime(DateTime.UtcNow)
             };
 
-            // Guardar la factura primero en la base de datos
             await _facturaRepo.crearFactura(factura);
 
-            // Ahora, agregamos cada DetallexFactura por separado
             foreach (var plato in dto.Platos)
             {
                 var detalle = new DetallexFactura
@@ -91,9 +84,6 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
 
                 await _detalleFacturaRepository.agregarDetalleFactura(detalle);
             }
-
-           
-            //await _context.SaveChangesAsync();
 
             return factura.NroFactura;
         }

@@ -15,21 +15,23 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
             _context = context;
         }
 
-        public async Task<List<MeseroVentasDto>> ObtenerVentasPorMesero()
-        {
-            var resultado = await _context.Meseros
-                .Select(m => new MeseroVentasDto
-                {
-                    Nombre = m.Nombres,
-                    Apellido = m.Apellidos,
-                    TotalVendido = m.Facturas
-                        .SelectMany(f => f.DetallexFacturas)
-                        .Sum(d => (decimal?)d.Valor) ?? 0
-                })
-                .ToListAsync();
+      public async Task<List<MeseroVentasDto>> ObtenerVentasPorMesero(DateOnly fecha)
+{
+        var resultado = (from df in _context.DetallexFacturas
+    join f in _context.Facturas on df.NroFactura equals f.NroFactura
+    join m in _context.Meseros on f.NroFactura equals m.IdMesero
+    where f.Fecha == fecha
+    group df by m.Nombres into grupo
+    select new MeseroVentasDto
+    {
+        Nombre = grupo.Key,    
+        TotalVendido = grupo.Sum(x => x.Valor) ?? 0m
+    }).ToList();
 
-            return resultado;
-        }
+   
+    return resultado;
+}
+
 
         async public Task<Mesero?> obtenerMeseroPorId(int id) =>
         await _context.Meseros.FindAsync(id);

@@ -15,9 +15,10 @@ namespace restaurante_comidas_tipicas_del_sur.Controllers
         }
 
         [HttpGet("ventas-meseros")]
-        public async Task<IActionResult> VentasPorMesero()
+        public async Task<IActionResult> ObtenerVentasMeseros([FromQuery] DateOnly? fecha)
         {
-            var resultado = await _consultasService.ObtenerVentasPorMesero();
+            var fechaConsulta = fecha ?? DateOnly.FromDateTime(DateTime.Now);
+            var resultado = await _consultasService.ObtenerVentasPorMesero(fechaConsulta);
             return Ok(resultado);
         }
 
