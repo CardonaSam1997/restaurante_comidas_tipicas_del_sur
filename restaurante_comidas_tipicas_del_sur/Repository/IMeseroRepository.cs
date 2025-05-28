@@ -10,6 +10,6 @@ namespace restaurante_comidas_tipicas_del_sur.Repository
 
         Task agregarMesero(Mesero mesero);
 
-        Task<List<MeseroVentasDto>> ObtenerVentasPorMesero(DateOnly fecha);        
+        List<MeseroVentasDto> ObtenerVentasPorMesero(DateOnly fecha);
     }
 }

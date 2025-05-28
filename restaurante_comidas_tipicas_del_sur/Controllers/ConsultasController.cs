@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using restaurante_comidas_tipicas_del_sur.Dto;
 using restaurante_comidas_tipicas_del_sur.Service;
 
 namespace restaurante_comidas_tipicas_del_sur.Controllers
@@ -15,10 +16,10 @@ namespace restaurante_comidas_tipicas_del_sur.Controllers
         }
 
         [HttpGet("ventas-meseros")]
-        public async Task<IActionResult> ObtenerVentasMeseros([FromQuery] DateOnly? fecha)
+        public ActionResult<List<MeseroVentasDto>> ObtenerVentasPorMesero([FromQuery] DateOnly? fecha)
         {
             var fechaConsulta = fecha ?? DateOnly.FromDateTime(DateTime.Now);
-            var resultado = await _consultasService.ObtenerVentasPorMesero(fechaConsulta);
+            var resultado = _consultasService.ObtenerVentasPorMesero(fechaConsulta);
             return Ok(resultado);
         }
 
