@@ -7,24 +7,32 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
     public class FacturaService : IFacturaService
     {
         private readonly IMeseroRepository _meseroRepo;
-        private readonly IFacturaRepository _facturaRepo;        
+        private readonly IFacturaRepository _facturaRepo;
         private readonly IClienteRepository _clienteRepo;
         private readonly IMesaRepository _mesaRepo;
         private readonly IDetalleFacturaRepository _detalleFacturaRepository;
 
 
-        public FacturaService(IFacturaRepository facturaRepo,IMeseroRepository meseroRepo, IClienteRepository clienteRepo,
+        public FacturaService(IFacturaRepository facturaRepo, IMeseroRepository meseroRepo, IClienteRepository clienteRepo,
                               IMesaRepository mesaRepo, IDetalleFacturaRepository detalleFacturaRepository)
         {
-            _facturaRepo = facturaRepo;            
+            _facturaRepo = facturaRepo;
             _meseroRepo = meseroRepo;
             _clienteRepo = clienteRepo;
             _mesaRepo = mesaRepo;
             _detalleFacturaRepository = detalleFacturaRepository;
         }
 
+
+
+        public async Task<List<Factura>> ObtenerFacturas()
+    {
+        return await _facturaRepo.ObtenerFacturas();
+    }
+
+
         public async Task<int> CrearFacturaAsync(CrearFacturaRequest dto)
-        {            
+        {
             var cliente = await _clienteRepo.obtenerClientePorId(dto.Cliente.Identificacion);
 
             if (cliente == null)
@@ -37,10 +45,10 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
                     Direccion = dto.Cliente.Direccion,
                     Telefono = dto.Cliente.Telefono
                 };
-                await _clienteRepo.agregarCliente(cliente); 
+                await _clienteRepo.agregarCliente(cliente);
             }
 
-            
+
             var mesero = await _meseroRepo.obtenerMeseroPorId(dto.Mesero.IdMesero);
 
             if (mesero == null)
@@ -51,7 +59,7 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
                 };
                 await _meseroRepo.agregarMesero(mesero);
             }
-            
+
             var mesa = await _mesaRepo.obtenerMesaPorId(dto.Mesa.NroMesa);
             if (mesa == null)
             {
@@ -88,5 +96,7 @@ namespace restaurante_comidas_tipicas_del_sur.Service.Impl
             return factura.NroFactura;
         }
     }
+    
+
 
 }

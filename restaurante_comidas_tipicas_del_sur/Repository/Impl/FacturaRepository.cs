@@ -17,7 +17,10 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
             await _context.SaveChangesAsync();
         }
        
-        
+        public async Task<List<Factura>> ObtenerFacturas()
+        {
+            return await _context.Facturas.ToListAsync();
+        }
     }
     
     

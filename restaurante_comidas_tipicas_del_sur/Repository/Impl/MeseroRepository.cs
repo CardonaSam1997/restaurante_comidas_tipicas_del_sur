@@ -15,22 +15,31 @@ namespace restaurante_comidas_tipicas_del_sur.Repository.Impl
             _context = context;
         }
 
-      public async Task<List<MeseroVentasDto>> ObtenerVentasPorMesero(DateOnly fecha)
-{
-        var resultado = (from df in _context.DetallexFacturas
-    join f in _context.Facturas on df.NroFactura equals f.NroFactura
-    join m in _context.Meseros on f.NroFactura equals m.IdMesero
-    where f.Fecha == fecha
-    group df by m.Nombres into grupo
-    select new MeseroVentasDto
-    {
-        Nombre = grupo.Key,    
-        TotalVendido = grupo.Sum(x => x.Valor) ?? 0m
-    }).ToList();
+        public async Task<List<MeseroVentasDto>> ObtenerVentasPorMesero(DateOnly fecha){
+            var query = from mesero in _context.Meseros
+                        join factura in _context.Facturas on mesero.IdMesero equals factura.IdMesero into facturasGroup
+                        from factura in facturasGroup.DefaultIfEmpty()
+                        where factura == null || factura.Fecha == null || factura.Fecha == fecha
+                        select new
+                        {
+                            Mesero = mesero,
+                            Factura = factura
+                        };
 
-   
-    return resultado;
-}
+            var resultado = await query
+                .GroupBy(x => new { x.Mesero.IdMesero, x.Mesero.Nombres, x.Mesero.Apellidos })
+                .Select(g => new MeseroVentasDto
+                {            
+                    Nombre = $"{g.Key.Nombres} {g.Key.Apellidos}".Trim(),
+                    TotalVendido = g
+                        .Where(x => x.Factura != null)
+                        .SelectMany(x => x.Factura.DetallexFacturas)
+                        .Sum(df => df.Valor ?? 0m)
+                })
+                .ToListAsync();
+
+            return resultado;
+        }
 
 
         async public Task<Mesero?> obtenerMeseroPorId(int id) =>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using restaurante_comidas_tipicas_del_sur.Dto;
+using restaurante_comidas_tipicas_del_sur.Entity;
 using restaurante_comidas_tipicas_del_sur.Service;
 
 namespace restaurante_comidas_tipicas_del_sur.Controllers
@@ -13,6 +14,14 @@ namespace restaurante_comidas_tipicas_del_sur.Controllers
         public FacturaController(IFacturaService facturaService)
         {
             _facturaService = facturaService;
+        }
+
+
+         [HttpGet("facturas")]
+        public async Task<ActionResult<List<Factura>>> GetFacturas()
+        {
+            var facturas = await _facturaService.ObtenerFacturas();
+            return Ok(facturas);
         }
 
         [HttpPost("crear")]
